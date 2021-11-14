@@ -9,5 +9,5 @@ export const solve = (input) => {
 };
 
 console.log(solve(readInput('example1.txt')), '\n\n\n');
-console.log(solve(readInput('example2.txt')), '\n\n\n');
-console.log(solve(readInput('puzzleInput.txt')), '\n\n\n');
+// console.log(solve(readInput('example2.txt')), '\n\n\n');
+// console.log(solve(readInput('puzzleInput.txt')), '\n\n\n');

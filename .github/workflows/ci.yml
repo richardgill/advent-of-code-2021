@@ -18,9 +18,10 @@ jobs:
         with:
           deno-version: v1.16.1
 
-      - uses: jurassiscripts/setup-velociraptor@v1
-          with:
-            velociraptor-version: 1.3.0
+      - name: Setup Velociraptor
+        uses: jurassiscripts/setup-velociraptor@v1
+        with:
+          velociraptor-version: 1.3.0
 
       - name: Format
         run: vr format --check
