@@ -1,0 +1,11 @@
+scripts:
+  start: deno run --import-map=import_map.json --allow-run bin/runDay.js
+  lint: deno run --import-map=import_map.json --allow-run bin/lint.js
+  format: deno fmt --config deno.json
+  test: deno run --import-map=import_map.json --allow-run bin/test.js
+  pre-commit:
+    cmd:
+      - vr lint
+      - vr format
+      - vr test
+    gitHook: pre-commit
