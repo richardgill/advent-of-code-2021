@@ -23,11 +23,5 @@ jobs:
         with:
           velociraptor-version: 1.3.0
 
-      - name: Format
-        run: vr format --check
-
-      - name: Lint
-        run: vr lint
-
-      - name: Tests
-        run: vr test
+      - name: CI
+        run: vr ci
