@@ -1,3 +1,5 @@
+# [Solutions](./src/days)
+
 # Setup
 
 - Download Deno
