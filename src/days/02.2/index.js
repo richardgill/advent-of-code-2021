@@ -32,7 +32,6 @@ const followInstructions = (instructions) => {
 
 export const solve = (input) => {
   const instructions = parseInstructions(input);
-  console.log(instructions);
   const { horizontalPosition, depth } = followInstructions(instructions);
   return horizontalPosition * depth;
 };
