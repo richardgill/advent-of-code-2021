@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { readRelativeInput } from '@/common/file.js';
 
 const readInput = (fileName) => readRelativeInput(import.meta.url, fileName);
-// 6:43
+
 const parseInstructions = (input) => {
   const instructions = input.trim().split('\n').map((instruction) => {
     const [direction, units] = instruction.split(' ');
