@@ -4,7 +4,7 @@ import { runCommand } from './common.js';
 
 const { argv } = yargs(Deno.args).option('day', { type: 'string' }).option('watch', { type: 'boolean', default: false });
 
-await runCommand(
+const exitCode = await runCommand(
   _.compact([
     'deno',
     'test',
@@ -18,3 +18,4 @@ await runCommand(
     argv.day ? `src/days/${argv.day}` : null,
   ]),
 );
+Deno.exit(exitCode);
