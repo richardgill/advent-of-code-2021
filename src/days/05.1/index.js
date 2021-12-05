@@ -18,13 +18,6 @@ const createEmptyMap = (lines) => {
   const mapHeight = _.maxBy(coordinates, 'y').y + 1;
   return Array(mapWidth).fill(0).map(() => Array(mapHeight).fill(0));
 };
-const transposeArray = (array) => {
-  return _.zip(...array);
-};
-
-const printArrayOfArrays = (arrayOfArrays) => {
-  return transposeArray(arrayOfArrays).map((row) => row.join(' ')).join('\n');
-};
 
 const sortRange = (a, b) => {
   const [low, high] = _.sortBy([a, b]);
@@ -54,8 +47,6 @@ const buildMap = (lines) => {
   for (const [fromCoordinate, toCoordinate] of lines) {
     console.log(fromCoordinate, toCoordinate);
     incrementMap(map, fromCoordinate, toCoordinate);
-
-    // console.log('map:', printArrayOfArrays(map), '\n');
   }
   return map;
 };

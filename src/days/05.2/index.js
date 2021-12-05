@@ -18,55 +18,39 @@ const createEmptyMap = (lines) => {
   const mapHeight = _.maxBy(coordinates, 'y').y + 1;
   return Array(mapWidth).fill(0).map(() => Array(mapHeight).fill(0));
 };
-const transposeArray = (array) => {
-  return _.zip(...array);
-};
 
-const printArrayOfArrays = (arrayOfArrays) => {
-  return transposeArray(arrayOfArrays).map((row) => row.join(' ')).join('\n');
-};
-
-const sortRange = (a, b) => {
-  // const [low, high] = _.sortBy([a, b]);
+// handles positive and negative direction lines
+const coordinateRange = (a, b) => {
   return a < b ? _.range(a, b + 1) : _.range(a, b - 1);
 };
 
+// fill coordinates out for horizontal and vertical line cases
+const fillCoordinates = (xs, ys) => {
+  if (xs.length < ys.length) {
+    return [_.times(ys.length, () => xs[0]), ys];
+  }
+  if (xs.length > ys.length) {
+    return [xs, _.times(xs.length, () => ys[0])];
+  }
+  return [xs, ys];
+};
+
 const coordinatesBetween = (fromCoordinate, toCoordinate) => {
-  const xs = sortRange(fromCoordinate.x, toCoordinate.x);
-  const ys = sortRange(fromCoordinate.y, toCoordinate.y);
-  const r = _.zip(xs, ys).map(([x, y]) => ({ x, y }));
-  console.log('r:', r);
-  return r;
+  const xs = coordinateRange(fromCoordinate.x, toCoordinate.x);
+  const ys = coordinateRange(fromCoordinate.y, toCoordinate.y);
+  return _.zip(...fillCoordinates(xs, ys)).map(([x, y]) => ({ x, y }));
 };
 
 const incrementMap = (map, fromCoordinate, toCoordinate) => {
-  if (fromCoordinate.x === toCoordinate.x) {
-    sortRange(fromCoordinate.y, toCoordinate.y).forEach((y) => {
-      console.log('incrementing', fromCoordinate.x, y);
-      map[fromCoordinate.x][y]++;
-    });
-  } else if (fromCoordinate.y === toCoordinate.y) {
-    sortRange(fromCoordinate.x, toCoordinate.x).forEach((x) => {
-      console.log('incrementing', x, fromCoordinate.y);
-      map[x][fromCoordinate.y]++;
-    });
-  } else {
-    console.log('diag');
-    coordinatesBetween(fromCoordinate, toCoordinate).forEach((coordinate) => {
-      console.log('incrementing', coordinate.x, coordinate.y);
-      map[coordinate.x][coordinate.y]++;
-    });
-  }
-  return map;
+  coordinatesBetween(fromCoordinate, toCoordinate).forEach((coordinate) => {
+    map[coordinate.x][coordinate.y]++;
+  });
 };
 
 const buildMap = (lines) => {
   const map = createEmptyMap(lines);
   for (const [fromCoordinate, toCoordinate] of lines) {
-    console.log(fromCoordinate, toCoordinate);
     incrementMap(map, fromCoordinate, toCoordinate);
-
-    // console.log('map:\n', printArrayOfArrays(map), '\n');
   }
   return map;
 };
@@ -77,12 +61,10 @@ const countGreaterThanEqualTo = (map, threshold) => {
 
 export const solve = (input) => {
   const lines = parseInput(input);
-  console.log(lines);
   const map = buildMap(lines);
-  // console.log(printArrayOfArrays(map));
   return countGreaterThanEqualTo(map, 2);
 };
 
 console.log(solve(readInput('example1.txt')), '\n\n\n');
-// console.log(solve(readInput('example2.txt')), '\n\n\n');
+
 console.log(solve(readInput('puzzleInput.txt')), '\n\n\n');
