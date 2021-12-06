@@ -3,7 +3,6 @@
     "@/": "./src/",
     "./": "./",
     "lodash": "https://deno.land/x/lodash@4.17.15-es/lodash.js",
-    "yargs": "https://deno.land/x/yargs/deno.ts",
-    "memoizy": "https://deno.land/x/memoizy@1.0.0/mod.ts"
+    "yargs": "https://deno.land/x/yargs/deno.ts"
   }
 }

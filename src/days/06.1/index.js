@@ -30,7 +30,6 @@ export const solve = (input) => {
   return runDays(timers, 40).length;
 };
 
-console.log(solve('4'), '\n\n\n');
-// console.log(solve(readInput('example1.txt')), '\n\n\n');
-// console.log(solve(readInput('example2.txt')), '\n\n\n');
-// console.log(solve(readInput('puzzleInput.txt')), '\n\n\n');
+console.log(solve(readInput('example1.txt')), '\n\n\n');
+console.log(solve(readInput('example2.txt')), '\n\n\n');
+console.log(solve(readInput('puzzleInput.txt')), '\n\n\n');
