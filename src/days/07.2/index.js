@@ -10,7 +10,7 @@ const calculateFuel = (distance) => {
 };
 
 const lowestFuelPosition = (positions) => {
-  const possiblePositions = _.range(_.min(positions), _.max(positions));
+  const possiblePositions = _.range(_.min(positions), _.max(positions) + 1);
   const fuelCosts = possiblePositions.map((position) => {
     return _(positions).map((p) => {
       const distance = Math.abs(p - position);
