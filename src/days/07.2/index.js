@@ -5,8 +5,14 @@ const readInput = (fileName) => readRelativeInput(import.meta.url, fileName);
 
 const parseInput = (input) => input.trim().split(',').map((x) => parseInt(x, 10));
 
+// deno-lint-ignore no-unused-vars
 const calculateFuel = (distance) => {
   return _.sum(_.range(1, distance + 1));
+};
+
+// Formula: https://www.mathsisfun.com/algebra/sequences-sums-arithmetic.html
+const calculateFuelUsingFormula = (distance) => {
+  return distance / 2 * (2 + (distance - 1));
 };
 
 const lowestFuelPosition = (positions) => {
@@ -14,7 +20,7 @@ const lowestFuelPosition = (positions) => {
   const fuelCosts = possiblePositions.map((position) => {
     return _(positions).map((p) => {
       const distance = Math.abs(p - position);
-      return calculateFuel(distance);
+      return calculateFuelUsingFormula(distance);
     }).sum();
   });
   return _.min(fuelCosts);
