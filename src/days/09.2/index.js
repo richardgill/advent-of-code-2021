@@ -26,15 +26,15 @@ const clusterBasinPoints = (pointsRaw) => {
     const existingClusters = _.filter(clusters, (cluster) => {
       return _.some(cluster, (c) => _.some(adajacentCoordinates, (c1) => _.isEqual(c, c1)));
     });
-    if (existingClusters.length === 0) {
+
+    if (existingClusters.length === 0) { // new cluster
       clusters.push([[x, y]]);
-    } else if (existingClusters.length === 1) {
+    } else if (existingClusters.length === 1) { // 1 existing cluster
       existingClusters[0].push([x, y]);
-    } else {
-      const firstCluster = existingClusters[0];
-      for (const existingCluster of _.drop(existingClusters, 1)) {
-        const clusterIndex = clusters.indexOf(existingCluster);
-        clusters.splice(clusterIndex, 1); // remove cluster
+    } else { // joins two existing clusters - we need to merge them
+      const [firstCluster, ...restOfClusters] = existingClusters;
+      for (const existingCluster of restOfClusters) {
+        clusters.splice(clusters.indexOf(existingCluster), 1); // remove cluster
         firstCluster.push(...existingCluster); // add points to first cluster
       }
       firstCluster.push([x, y]);
