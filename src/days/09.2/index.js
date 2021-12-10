@@ -22,9 +22,9 @@ const clusterBasinPoints = (pointsRaw) => {
   const clusters = [];
   while (coordinatesInBasin.length > 0) {
     const [x, y] = coordinatesInBasin.shift();
-    const adajacentCoordinates = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]];
+    const adjacentCoordinates = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]];
     const existingClusters = _.filter(clusters, (cluster) => {
-      return _.some(cluster, (c) => _.some(adajacentCoordinates, (c1) => _.isEqual(c, c1)));
+      return _.some(cluster, (c) => _.some(adjacentCoordinates, (c1) => _.isEqual(c, c1)));
     });
 
     if (existingClusters.length === 0) { // new cluster
