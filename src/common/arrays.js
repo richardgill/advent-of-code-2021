@@ -5,5 +5,5 @@ export const transposeArray = (array) => {
 };
 
 export const printArrayOfArrays = (arrayOfArrays) => {
-  return transposeArray(arrayOfArrays).map((row) => row.join(' ')).join('\n');
+  return arrayOfArrays.map((row) => row.join('')).join('\n');
 };
