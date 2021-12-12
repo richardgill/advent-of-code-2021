@@ -27,7 +27,7 @@ const nextCavesToVisit = (currentCave, caves) => {
 const findCavePaths = (caves, soFar) => {
   const currentCave = _.last(soFar);
   if (currentCave === 'end') {
-    // this hack makes flapMap work properly (because the result is not an array, so results cannot be flattened)
+    // this hack makes flapMap work properly (because the result is not an array, so {result: soFar} objects won't be flattened)
     return { result: soFar };
   }
 
