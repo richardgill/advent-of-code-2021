@@ -4,7 +4,7 @@ import { readRelativeInput } from '@/common/file.js';
 const readInput = (fileName) => readRelativeInput(import.meta.url, fileName);
 
 const write = (text) => {
-  // Deno.writeAllSync(Deno.stdout, new TextEncoder().encode(text));
+  Deno.writeSync(Deno.stdout, new TextEncoder().encode(text));
 };
 
 const printDots = (dots) => {
@@ -94,7 +94,6 @@ const doFold = (dots, fold) => {
     printDots(result);
     return result;
   }
-  const originalDots = _.filter(dots);
 };
 
 export const solve = (input) => {
@@ -109,5 +108,4 @@ export const solve = (input) => {
 };
 
 console.log(solve(readInput('example1.txt')), '\n\n\n');
-// console.log(solve(readInput('example2.txt')), '\n\n\n');
 console.log(solve(readInput('puzzleInput.txt')), '\n\n\n');

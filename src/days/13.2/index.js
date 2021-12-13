@@ -4,7 +4,7 @@ import { readRelativeInput } from '@/common/file.js';
 const readInput = (fileName) => readRelativeInput(import.meta.url, fileName);
 
 const write = (text) => {
-  Deno.writeAllSync(Deno.stdout, new TextEncoder().encode(text));
+  Deno.writeSync(Deno.stdout, new TextEncoder().encode(text));
 };
 
 const printDots = (dots) => {
@@ -36,78 +36,38 @@ const parseInput = (input) => {
   return { dots, folds };
 };
 
-const flipCoordinatesY = (dots, fold) => {
-  return _.map(dots, (dot) => {
-    return {
-      x: dot.x,
-      y: fold.index - (dot.y - fold.index),
-    };
-  });
-};
+const flipCoordinatesY = (dots, fold) => dots.map((dot) => ({ x: dot.x, y: fold.index - (dot.y - fold.index) }));
 
-const flipCoordinatesX = (dots, fold) => {
-  return _.map(dots, (dot) => {
-    return {
-      x: fold.index - (dot.x - fold.index),
-      y: dot.y,
-    };
-  });
-};
+const flipCoordinatesX = (dots, fold) => dots.map((dot) => ({ x: fold.index - (dot.x - fold.index), y: dot.y }));
 
 const mergeDots = (dots1, dots2) => {
   return _.uniqWith(_.concat(dots1, dots2), _.isEqual);
 };
 
 const doFold = (dots, fold) => {
+  let partitionDots;
+  let flipDots;
   if (fold.along === 'y') {
-    const originalDots = dots.filter((dot) => dot.y < fold.index);
-    const foldDots = dots.filter((dot) => dot.y > fold.index);
-    const flippedFoldDots = flipCoordinatesY(foldDots, fold);
-    // console.log('originalDots', originalDots);
-    // printDots(originalDots);
-    // console.log('\n');
-    // console.log('foldDots', foldDots);
-    // printDots(foldDots);
-    // console.log('\nflipped\n');
-    // console.log(flippedFoldDots);
-    // printDots(flippedFoldDots);
-    const result = mergeDots(originalDots, flippedFoldDots);
-    // console.log('\nresult\n');
-    // console.log('result', result);
-    // printDots(result);
-    return result;
+    partitionDots = (dot) => dot.y < fold.index;
+    flipDots = flipCoordinatesY;
   } else {
-    const originalDots = dots.filter((dot) => dot.x < fold.index);
-    const foldDots = dots.filter((dot) => dot.x > fold.index);
-    const flippedFoldDots = flipCoordinatesX(foldDots, fold);
-    // console.log('originalDots', originalDots);
-    // printDots(originalDots);
-    // console.log('\n');
-    // console.log('foldDots', foldDots);
-    // printDots(foldDots);
-    // console.log('\nflipped\n');
-    // console.log(flippedFoldDots);
-    // printDots(flippedFoldDots);
-    const result = mergeDots(originalDots, flippedFoldDots);
-    // console.log('\nresult\n');
-    // console.log('result', result);
-    // printDots(result);
-    return result;
+    partitionDots = (dot) => dot.x < fold.index;
+    flipDots = flipCoordinatesX;
   }
+  const originalDots = dots.filter(partitionDots);
+  const foldDots = dots.filter((dot) => !partitionDots(dot));
+  const flippedFoldDots = flipDots(foldDots, fold);
+  return mergeDots(originalDots, flippedFoldDots);
 };
 
 export const solve = (input) => {
   let { dots, folds } = parseInput(input);
-  // console.log(dots, folds);
-  // printDots(dots);
-  // folds = [folds[0]];
   for (const fold of folds) {
     dots = doFold(dots, fold);
   }
   printDots(dots);
-  return dots.length;
 };
 
-console.log(solve(readInput('example1.txt')), '\n\n\n');
-// console.log(solve(readInput('example2.txt')), '\n\n\n');
-console.log(solve(readInput('puzzleInput.txt')), '\n\n\n');
+solve(readInput('example1.txt'));
+console.log('\n');
+solve(readInput('puzzleInput.txt'));
