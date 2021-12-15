@@ -4,6 +4,6 @@ export const transposeArray = (array) => {
   return _.zip(...array);
 };
 
-export const printArrayOfArrays = (arrayOfArrays) => {
-  return arrayOfArrays.map((row) => row.join('')).join('\n');
+export const printArrayOfArrays = (arrayOfArrays, sep = '') => {
+  return arrayOfArrays.map((row) => row.join(sep)).join('\n');
 };
