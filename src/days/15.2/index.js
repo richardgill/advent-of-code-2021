@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { readRelativeInput } from '@/common/file.js';
+import { printArrayOfArrays } from '@/common/arrays.js';
 import { dijkstra } from './l3.js';
 
 const readInput = (fileName) => readRelativeInput(import.meta.url, fileName);
@@ -31,8 +32,7 @@ const buildGraph = (cavern) => {
   return graph;
 };
 
-export const solve = (input) => {
-  const cavern = parseInput(input);
+const shortestPath = (cavern) => {
   const graph = buildGraph(cavern);
   const path = dijkstra.find_path(graph, '0,0', `${cavern.length - 1},${cavern[0].length - 1}`);
   return _.chain(path)
@@ -41,6 +41,29 @@ export const solve = (input) => {
     .map(([x, y]) => cavern[x][y])
     .sum()
     .value();
+};
+
+// 1 is 1, 10 is 1, 9 is 9 and so on
+const wrapNumber = (n) => {
+  return n === 9 ? 9 : n % 9;
+};
+
+const expandMap = (cavern, multipler = 5) => {
+  const caveWidth = cavern.length * multipler;
+  const largerCavern = new Array(caveWidth).fill(0).map(() => new Array(caveWidth).fill(0));
+  for (let y = 0; y < caveWidth; y++) {
+    for (let x = 0; x < caveWidth; x++) {
+      const toAddToTile = Math.floor(x / cavern.length) + Math.floor(y / cavern.length);
+      largerCavern[x][y] = wrapNumber(cavern[x % cavern.length][y % cavern.length] + toAddToTile);
+    }
+  }
+  return largerCavern;
+};
+
+export const solve = (input) => {
+  const cavern = expandMap(parseInput(input));
+  console.log(printArrayOfArrays(cavern));
+  return shortestPath(cavern);
 };
 
 console.log(solve(readInput('example1.txt')), '\n\n\n');
