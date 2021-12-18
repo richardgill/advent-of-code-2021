@@ -10,15 +10,14 @@ const arrayToTree = (element) => {
 };
 
 const treeToArray = (tree) => {
-  // console.log('treeToArray', tree);
   if (_.isNumber(tree)) {
     return tree;
   }
   return [treeToArray(tree.left), treeToArray(tree.right)];
 };
 
+// produces an array of non-leaf nodes ordered from left to right across the tree
 const nodesLeftToRight = (tree, parent = null, depth = 0) => {
-  // console.log('nltr', tree);
   if (_.isNumber(tree)) {
     return [];
   }
@@ -32,7 +31,6 @@ const nodesLeftToRight = (tree, parent = null, depth = 0) => {
 };
 
 const addToRightMost = (tree, value, depth = 0) => {
-  // console.log('addToRightMost', tree, value, depth);
   if (!tree) {
     return;
   }
@@ -51,7 +49,6 @@ const addToRightMost = (tree, value, depth = 0) => {
 };
 
 const addToLeftMost = (tree, value, depth = 0) => {
-  // console.log('addToLeftMost', tree, value, depth);
   if (!tree) {
     return;
   }
@@ -79,18 +76,13 @@ const setNodeTo0 = (tree) => {
 
 const explodeTree = (tree) => {
   const leftToRightNodes = nodesLeftToRight(tree);
-  // console.log('leftToRightNodes', leftToRightNodes);
   const index = _.findIndex(leftToRightNodes, (node) => node.depth === 4);
-  // console.log('index', index);
   if (index === -1) {
     return tree;
   }
   const node = leftToRightNodes[index];
   const leftNode = index > 0 ? leftToRightNodes[index - 1] : null;
   const rightNode = index < leftToRightNodes.length ? leftToRightNodes[index + 1] : null;
-  // console.log('node', node);
-  // console.log('leftNode', leftNode);
-  // console.log('rightNode', rightNode);
   addToRightMost(leftNode, node.left);
   addToLeftMost(rightNode, node.right);
   setNodeTo0(node);
@@ -99,7 +91,6 @@ const explodeTree = (tree) => {
 
 const splitTree = (tree) => {
   const leftToRightNodes = nodesLeftToRight(tree);
-  // console.log('split leftToRightNodes', leftToRightNodes);
   const nodeToSplit = _.find(leftToRightNodes, (node) => node.left >= 10 || node.right >= 10);
   if (!nodeToSplit) {
     return tree;
@@ -113,10 +104,7 @@ const splitTree = (tree) => {
 };
 
 const reduce = (tree) => {
-  // console.log('reduce', treeToArray(tree));
-
   const explodedTree = explodeTree(_.cloneDeep(tree));
-  // console.log('explodedTree', treeToArray(explodedTree));
   if (!_.isEqual(tree, explodedTree)) {
     return reduce(explodedTree);
   }
@@ -148,25 +136,40 @@ const magnitude = (array) => {
   return leftValue + rightValue;
 };
 
-export const solve = (arrays) => {
-  const result = addArrays(arrays);
-  return magnitude(result);
+const generateAllPairs = (array) => {
+  const combinations = [];
+  for (let index = 0; index < array.length; index++) {
+    const element = array[index];
+    for (let indexA = 0; indexA < array.length; indexA++) {
+      if (index !== indexA) {
+        const elementA = array[indexA];
+        combinations.push([element, elementA]);
+      }
+    }
+  }
+  return combinations;
 };
 
-// console.log(solve([1, [2, 3]]), '\n\n\n');
-// console.log(reduceArray([[[[[9, 8], 1], 2], 3], 4]), '\n\n\n');
-// console.log(reduceArray([7, [6, [5, [4, [3, 2]]]]]), '\n\n\n');
-// console.log(reduceArray([[6, [5, [4, [3, 2]]]], 1]), '\n\n\n');
-// console.log(reduceArray([[3, [2, [1, [7, 3]]]], [6, [5, [4, [3, 2]]]]]), '\n\n\n');
-// console.log(add([[[[4, 3], 4], 4], [7, [[8, 4], 9]]], [1, 1]), '\n\n\n');
-// console.log(solve([[1, 1], [2, 2], [3, 3], [4, 4]]), '\n\n\n');
-// console.log(solve([[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]]), '\n\n\n');
-// console.log(solve([[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6]]), '\n\n\n');
+export const solve = (arrays) => {
+  const allPairs = generateAllPairs(arrays);
+  return _.chain(allPairs).map(addArrays).map(magnitude).max().value();
+};
+
+console.log(solve([1, [2, 3]]), '\n\n\n');
+console.log(reduceArray([[[[[9, 8], 1], 2], 3], 4]), '\n\n\n');
+console.log(reduceArray([7, [6, [5, [4, [3, 2]]]]]), '\n\n\n');
+console.log(reduceArray([[6, [5, [4, [3, 2]]]], 1]), '\n\n\n');
+console.log(reduceArray([[3, [2, [1, [7, 3]]]], [6, [5, [4, [3, 2]]]]]), '\n\n\n');
+console.log(add([[[[4, 3], 4], 4], [7, [[8, 4], 9]]], [1, 1]), '\n\n\n');
+console.log(solve([[1, 1], [2, 2], [3, 3], [4, 4]]), '\n\n\n');
+console.log(solve([[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]]), '\n\n\n');
+console.log(solve([[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6]]), '\n\n\n');
 console.log(magnitude([9, 1]), '\n\n\n');
 console.log(magnitude([1, 9]), '\n\n\n');
 console.log(magnitude([[9, 1], [1, 9]]), '\n\n\n');
 console.log(magnitude([[1, 2], [[3, 4], 5]]), '\n\n\n');
 console.log(magnitude([[[[0, 7], 4], [[7, 8], [6, 0]]], [8, 1]]), '\n\n\n');
 console.log(solve(largerExample), '\n\n\n');
+console.log(solve([[1, 1], [2, 2], [3, 3], [4, 4]]), '\n\n\n');
 console.log(solve(exampleHomeWork), '\n\n\n');
 console.log(solve(puzzleInput), '\n\n\n');
