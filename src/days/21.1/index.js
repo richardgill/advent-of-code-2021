@@ -14,7 +14,7 @@ const playGame = (playerPositions) => {
   diceValue = 0;
   let diceRolls = 0;
   let playerTurn = 0;
-  let playerScores = [0, 0];
+  const playerScores = [0, 0];
   while (_.every(playerScores, (score) => score < 1000)) {
     console.log('\n');
     console.log('playerTurn', playerTurn);
