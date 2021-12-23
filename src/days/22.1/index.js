@@ -5,9 +5,9 @@ const readInput = (fileName) => readRelativeInput(import.meta.url, fileName);
 
 const parseInput = (input) => {
   return input.trim().split('\n').map((line) => {
-    const [state, coordinates] = line.split(' ');
+    const [state, _coordinates] = line.split(' ');
     const [x, y, z] = line.trim().split(',').map((coordinate) => {
-      const [direction, rest] = coordinate.split('=');
+      const [_direction, rest] = coordinate.split('=');
       const [from, to] = rest.split('..').map((x) => parseInt(x, 10));
       return {
         from,
@@ -20,9 +20,6 @@ const parseInput = (input) => {
 
 const empty3dArray = () => {
   return Array(101).fill(0).map(() => Array(101).fill(0).map(() => Array(101).fill(0)));
-};
-
-const coordinatesFromRanges = (x, y, z) => {
 };
 
 const isValueInBounds = (value) => value >= -50 && value <= 50;
